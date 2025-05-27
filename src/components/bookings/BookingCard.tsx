@@ -115,7 +115,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
             </div>
             <div className="flex items-center text-sm text-gray-700">
               <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>${booking.paidAmount} / ${booking.totalAmount}</span>
+              <span>৳{booking.paidAmount} / ৳{booking.totalAmount}</span>
             </div>
           </div>
           
@@ -177,8 +177,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
 
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-600 mb-2">Total Amount: ${booking.totalAmount}</p>
-                <p className="text-sm text-gray-600 mb-4">Currently Paid: ${booking.paidAmount}</p>
+                <p className="text-sm text-gray-600 mb-2">Total Amount: ৳{booking.totalAmount}</p>
+                <p className="text-sm text-gray-600 mb-4">Currently Paid: ৳{booking.paidAmount}</p>
                 
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Update Paid Amount

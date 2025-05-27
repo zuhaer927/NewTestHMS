@@ -24,6 +24,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
   const [isEditing, setIsEditing] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   
   const room = getRoomById(roomId);
   const currentBookings = getCurrentBookingsForRoom(roomId);
@@ -76,6 +77,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
   
   const handleBookingCreated = () => {
     setIsBooking(false);
+    setRefreshKey(prev => prev + 1);
     toast.success("Booking created successfully");
   };
   
@@ -224,7 +226,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                 <>
                   {currentBookings.map(booking => (
                     <BookingCard 
-                      key={booking.id} 
+                      key={`${booking.id}-${refreshKey}`}
                       booking={booking} 
                       isActive={true}
                     />
@@ -232,7 +234,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                   
                   {futureBookings.map(booking => (
                     <BookingCard 
-                      key={booking.id} 
+                      key={`${booking.id}-${refreshKey}`}
                       booking={booking} 
                       isActive={false}
                     />
