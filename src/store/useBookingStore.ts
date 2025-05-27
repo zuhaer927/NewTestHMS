@@ -73,7 +73,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
 
   addBooking: (bookingData) => {
     const id = uuidv4();
-    const newBooking = { ...bookingData, id, checkInDateTime: undefined };
+    const newBooking = { ...bookingData, id };
     set((state) => ({ bookings: [...state.bookings, newBooking] }));
     return id;
   },
