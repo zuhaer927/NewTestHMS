@@ -72,11 +72,14 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   bookings: initialBookings,
 
   addBooking: (bookingData) => {
-    const id = uuidv4();
-    const newBooking = { ...bookingData, id };
-    set((state) => ({ bookings: [...state.bookings, newBooking] }));
-    return id;
-  },
+  const id = uuidv4();
+  const newBooking = { ...bookingData, id };
+  set((state) => {
+    const updatedBookings = [...state.bookings, newBooking];
+    return { bookings: updatedBookings }; // This should trigger a re-render
+  });
+  return id;
+},
 
   updateBooking: (id, bookingData) => {
     let updated = false;
