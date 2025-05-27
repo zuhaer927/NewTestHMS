@@ -185,7 +185,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       if (booking.checkOutDateTime) return false;
       
       const bookingStart = startOfDay(parseISO(booking.bookingDate));
-      return isAfter(bookingStart, now) && !booking.checkInDateTime;
+      return (isAfter(bookingStart, now) || bookingStart.getTime() === now.getTime()) && !booking.checkInDateTime;
     });
   },
 
