@@ -18,8 +18,9 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
   const formattedToday = format(today, 'yyyy-MM-dd');
   const formattedTomorrow = format(addDays(today, 1), 'yyyy-MM-dd');
 
-  const [startDate] = useState(filter.startDate || formattedToday);
-  const [endDate] = useState(filter.endDate || formattedTomorrow);
+  // Use filter dates if provided, otherwise use today/tomorrow
+  const startDate = filter.startDate || formattedToday;
+  const endDate = filter.endDate || formattedTomorrow;
 
   const filteredRooms = useMemo(() => {
     let rooms = filter.category ? getRoomsByCategory(filter.category) : getAllRooms();
@@ -34,7 +35,7 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
     });
   }, [getAllRooms, getRoomsByCategory, filter.category]);
 
-  // Separate available and occupied/booked rooms
+  // Separate available and occupied/booked rooms based on date filter
   const { availableRooms, occupiedOrBookedRooms } = useMemo(() => {
     const available: Room[] = [];
     const occupiedOrBooked: Room[] = [];
