@@ -13,7 +13,7 @@ interface BookingFormProps {
 
 const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel }) => {
   const { getRoomById } = useRoomStore();
-  const { findOrCreateGuest } = useGuestStore();
+  const { findOrCreateGuest, getAllGuests } = useGuestStore();
   const { addBooking, isRoomAvailable } = useBookingStore();
   
   const room = getRoomById(roomId);
@@ -29,6 +29,17 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
   const [durationDays, setDurationDays] = useState('1');
   
   const [availabilityError, setAvailabilityError] = useState('');
+  
+  // Auto-fill guest information when National ID matches
+  useEffect(() => {
+    if (nationalId.length > 0) {
+      const existingGuest = getAllGuests().find(guest => guest.nationalId === nationalId);
+      if (existingGuest) {
+        setGuestName(existingGuest.name);
+        setPhone(existingGuest.phone);
+      }
+    }
+  }, [nationalId, getAllGuests]);
   
   // Calculate end date based on booking date and duration
   const endDate = durationDays && bookingDate 
@@ -101,20 +112,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="guestName" className="block text-sm font-medium text-gray-700 mb-1">
-            Guest Name*
-          </label>
-          <input
-            type="text"
-            id="guestName"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-            required
-          />
-        </div>
-        
-        <div>
           <label htmlFor="nationalId" className="block text-sm font-medium text-gray-700 mb-1">
             National ID*
           </label>
@@ -123,6 +120,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
             id="nationalId"
             value={nationalId}
             onChange={(e) => setNationalId(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+            required
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="guestName" className="block text-sm font-medium text-gray-700 mb-1">
+            Guest Name*
+          </label>
+          <input
+            type="text"
+            id="guestName"
+            value={guestName}
+            onChange={(e) => setGuestName(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             required
           />
