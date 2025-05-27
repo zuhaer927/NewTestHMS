@@ -80,6 +80,10 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
     setRefreshKey(prev => prev + 1);
     toast.success("Booking created successfully");
   };
+
+  const handleBookingUpdated = () => {
+    setRefreshKey(prev => prev + 1);
+  };
   
   if (isEditing) {
     return (
@@ -229,6 +233,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                       key={`${booking.id}-${refreshKey}`}
                       booking={booking} 
                       isActive={true}
+                      onUpdate={handleBookingUpdated}
                     />
                   ))}
                   
@@ -237,6 +242,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                       key={`${booking.id}-${refreshKey}`}
                       booking={booking} 
                       isActive={false}
+                      onUpdate={handleBookingUpdated}
                     />
                   ))}
                 </>
