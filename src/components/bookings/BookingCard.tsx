@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Booking } from '../../types';
-import { User, Calendar, Clock, CreditCard, Users, X } from 'lucide-react';
+import { User, Calendar, Clock, CreditCard, Users, X, Plus } from 'lucide-react';
 import { format, parseISO, addDays } from 'date-fns';
 import { useBookingStore } from '../../store/useBookingStore';
 import toast from 'react-hot-toast';
@@ -13,9 +13,12 @@ interface BookingCardProps {
 }
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom = false, onUpdate }) => {
-  const { checkIn, checkOut, updateBooking, getCurrentBookingsForRoom } = useBookingStore();
+  const { checkIn, checkOut, updateBooking, getCurrentBookingsForRoom, isRoomAvailable } = useBookingStore();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showExtendModal, setShowExtendModal] = useState(false);
   const [paidAmount, setPaidAmount] = useState(booking.paidAmount.toString());
+  const [extraDays, setExtraDays] = useState('1');
+  const [extraAmount, setExtraAmount] = useState('0');
   const [action, setAction] = useState<'checkIn' | 'checkOut' | null>(null);
   
   const handleCheckIn = () => {
@@ -33,6 +36,40 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
   const handleCheckOut = () => {
     setAction('checkOut');
     setShowPaymentModal(true);
+  };
+
+  const handleExtendBooking = () => {
+    const newEndDate = format(
+      addDays(
+        addDays(parseISO(booking.bookingDate), booking.durationDays),
+        parseInt(extraDays)
+      ),
+      'yyyy-MM-dd'
+    );
+
+    // Check if room is available for extended period
+    if (!isRoomAvailable(
+      booking.roomId,
+      format(addDays(parseISO(booking.bookingDate), booking.durationDays), 'yyyy-MM-dd'),
+      newEndDate,
+      booking.id
+    )) {
+      toast.error('Room is not available for the extended period');
+      return;
+    }
+
+    // Update booking with new duration and amount
+    const newDuration = booking.durationDays + parseInt(extraDays);
+    const newTotalAmount = booking.totalAmount + parseInt(extraAmount);
+
+    updateBooking(booking.id, {
+      durationDays: newDuration,
+      totalAmount: newTotalAmount
+    });
+
+    setShowExtendModal(false);
+    if (onUpdate) onUpdate();
+    toast.success('Booking duration extended successfully');
   };
   
   const handlePaymentConfirm = () => {
@@ -133,27 +170,34 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
             </div>
           )}
           
-          {!booking.checkInDateTime && (
-            <div className="mt-4">
+          <div className="mt-4 space-y-2">
+            {!booking.checkInDateTime && (
               <button
                 onClick={handleCheckIn}
                 className="btn btn-primary w-full"
               >
                 Check In
               </button>
-            </div>
-          )}
-          
-          {booking.checkInDateTime && !booking.checkOutDateTime && (
-            <div className="mt-4">
-              <button
-                onClick={handleCheckOut}
-                className="btn btn-primary w-full bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
-              >
-                Check Out
-              </button>
-            </div>
-          )}
+            )}
+            
+            {booking.checkInDateTime && !booking.checkOutDateTime && (
+              <>
+                <button
+                  onClick={() => setShowExtendModal(true)}
+                  className="btn btn-secondary w-full"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Extend Stay
+                </button>
+                <button
+                  onClick={handleCheckOut}
+                  className="btn btn-primary w-full bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
+                >
+                  Check Out
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -209,6 +253,77 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                 >
                   Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showExtendModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold">Extend Stay</h3>
+              <button
+                onClick={() => setShowExtendModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Additional Days
+                </label>
+                <input
+                  type="number"
+                  value={extraDays}
+                  onChange={(e) => setExtraDays(e.target.value)}
+                  min="1"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Additional Amount (৳)
+                </label>
+                <input
+                  type="number"
+                  value={extraAmount}
+                  onChange={(e) => setExtraAmount(e.target.value)}
+                  min="0"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                />
+              </div>
+
+              <div className="pt-4">
+                <p className="text-sm text-gray-600">
+                  New check-out date will be: {format(
+                    addDays(
+                      addDays(parseISO(booking.bookingDate), booking.durationDays),
+                      parseInt(extraDays)
+                    ),
+                    'MMM d, yyyy'
+                  )}
+                </p>
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  onClick={() => setShowExtendModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleExtendBooking}
+                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                >
+                  Extend Stay
                 </button>
               </div>
             </div>
