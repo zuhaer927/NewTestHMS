@@ -29,11 +29,13 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
     }
     
     setAction('checkIn');
+    setPaidAmount(booking.paidAmount.toString());
     setShowPaymentModal(true);
   };
   
   const handleCheckOut = () => {
     setAction('checkOut');
+    setPaidAmount(booking.paidAmount.toString());
     setShowPaymentModal(true);
   };
 
@@ -43,12 +45,12 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
         addDays(parseISO(booking.bookingDate), booking.durationDays),
         parseInt(extraDays)
       ),
-      'yyyy-MM-dd'
+      'dd/MM/yyyy'
     );
 
     if (!isRoomAvailable(
       booking.roomId,
-      format(addDays(parseISO(booking.bookingDate), booking.durationDays), 'yyyy-MM-dd'),
+      format(addDays(parseISO(booking.bookingDate), booking.durationDays), 'dd/MM/yyyy'),
       newEndDate,
       booking.id
     )) {
@@ -73,6 +75,11 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
     const newPaidAmount = parseFloat(paidAmount);
     if (isNaN(newPaidAmount) || newPaidAmount < 0) {
       toast.error('Please enter a valid amount');
+      return;
+    }
+
+    if (newPaidAmount <= booking.paidAmount) {
+      toast.error('New paid amount must be greater than current paid amount');
       return;
     }
     
@@ -226,7 +233,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
                   type="number"
                   value={paidAmount}
                   onChange={(e) => setPaidAmount(e.target.value)}
-                  min="0"
+                  min={booking.paidAmount + 0.01}
                   step="0.01"
                   max={booking.totalAmount}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
