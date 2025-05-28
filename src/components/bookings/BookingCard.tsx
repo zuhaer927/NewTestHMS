@@ -22,7 +22,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
   const [action, setAction] = useState<'checkIn' | 'checkOut' | null>(null);
   
   const handleCheckIn = () => {
-    // Check if any guest is already checked in
     const currentBookings = getCurrentBookingsForRoom(booking.roomId);
     if (currentBookings.length > 0) {
       toast.error('A guest is already checked in to this room');
@@ -47,7 +46,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       'yyyy-MM-dd'
     );
 
-    // Check if room is available for extended period
     if (!isRoomAvailable(
       booking.roomId,
       format(addDays(parseISO(booking.bookingDate), booking.durationDays), 'yyyy-MM-dd'),
@@ -58,7 +56,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       return;
     }
 
-    // Update booking with new duration and amount
     const newDuration = booking.durationDays + parseInt(extraDays);
     const newTotalAmount = booking.totalAmount + parseInt(extraAmount);
 
@@ -79,10 +76,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       return;
     }
     
-    // Update the paid amount
     updateBooking(booking.id, { paidAmount: newPaidAmount });
     
-    // Proceed with check-in/check-out
     if (action === 'checkIn') {
       const success = checkIn(booking.id);
       if (success) {
@@ -106,11 +101,11 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
   };
   
   const formatDate = (dateString: string) => {
-    return format(parseISO(dateString), 'MMM d, yyyy');
+    return format(parseISO(dateString), 'dd/MM/yyyy');
   };
   
   const formatDateTime = (dateTimeString: string) => {
-    return format(parseISO(dateTimeString), 'MMM d, yyyy h:mm a');
+    return format(parseISO(dateTimeString), 'dd/MM/yyyy HH:mm');
   };
   
   const paymentStatus = booking.paidAmount >= booking.totalAmount 
@@ -307,7 +302,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
                       addDays(parseISO(booking.bookingDate), booking.durationDays),
                       parseInt(extraDays)
                     ),
-                    'MMM d, yyyy'
+                    'dd/MM/yyyy'
                   )}
                 </p>
               </div>

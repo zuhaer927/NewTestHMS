@@ -232,6 +232,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                     <BookingCard 
                       key={`${booking.id}-${refreshKey}`}
                       booking={booking} 
+                      
                       isActive={true}
                       onUpdate={handleBookingUpdated}
                     />
@@ -240,7 +241,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomId, onBack, onDeleted }) 
                   {futureBookings.map(booking => (
                     <BookingCard 
                       key={`${booking.id}-${refreshKey}`}
-                      booking={booking} 
+                      booking={booking}
                       isActive={false}
                       onUpdate={handleBookingUpdated}
                     />

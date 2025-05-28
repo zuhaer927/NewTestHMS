@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGuestStore } from '../../store/useGuestStore';
 import { useBookingStore } from '../../store/useBookingStore';
 import { User, Phone, CreditCard, Calendar, Search } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
 
 const GuestsList: React.FC = () => {
   const { getAllGuests } = useGuestStore();
@@ -77,7 +78,7 @@ const GuestsList: React.FC = () => {
                       <p className="text-sm font-medium text-teal-800">Currently Staying</p>
                       <p className="text-xs text-teal-700">
                         Room: {activeBooking.roomId}, 
-                        Check-in: {new Date(activeBooking.checkInDateTime!).toLocaleDateString()}
+                        Check-in: {format(parseISO(activeBooking.checkInDateTime!), 'dd/MM/yyyy')}
                       </p>
                     </div>
                   )}
@@ -88,7 +89,7 @@ const GuestsList: React.FC = () => {
                       <ul className="text-xs text-gray-600 space-y-1">
                         {futureBookings.slice(0, 2).map(booking => (
                           <li key={booking.id}>
-                            Room {booking.roomId}, {new Date(booking.bookingDate).toLocaleDateString()} 
+                            Room {booking.roomId}, {format(parseISO(booking.bookingDate), 'dd/MM/yyyy')} 
                             ({booking.durationDays} days)
                           </li>
                         ))}
@@ -107,7 +108,7 @@ const GuestsList: React.FC = () => {
                       <ul className="text-xs text-gray-600 space-y-1">
                         {pastBookings.slice(0, 2).map(booking => (
                           <li key={booking.id}>
-                            Room {booking.roomId}, {new Date(booking.bookingDate).toLocaleDateString()} 
+                            Room {booking.roomId}, {format(parseISO(booking.bookingDate), 'dd/MM/yyyy')} 
                             ({booking.durationDays} days)
                           </li>
                         ))}
