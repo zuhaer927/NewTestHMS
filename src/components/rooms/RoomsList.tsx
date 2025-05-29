@@ -3,7 +3,7 @@ import { Room, RoomCategory, RoomFilter } from '../../types';
 import RoomCard from './RoomCard';
 import { useRoomStore } from '../../store/useRoomStore';
 import { useBookingStore } from '../../store/useBookingStore';
-import { format, addDays } from 'date-fns';
+import { format, addDays, parseISO, isWithinInterval } from 'date-fns';
 
 interface RoomsListProps {
   onSelectRoom: (roomId: string) => void;
@@ -12,7 +12,7 @@ interface RoomsListProps {
 
 const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
   const { getAllRooms, getRoomsByCategory } = useRoomStore();
-  const { getBookingsForRoom, getCurrentBookingsForRoom, isRoomAvailable } = useBookingStore();
+  const { getBookingsForRoom, isRoomAvailable } = useBookingStore();
   
   const today = new Date();
   const formattedToday = format(today, 'yyyy-MM-dd');
@@ -41,18 +41,36 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
     const occupiedOrBooked: Room[] = [];
 
     filteredRooms.forEach(room => {
-      const currentBooking = getCurrentBookingsForRoom(room.id)[0];
+      const bookings = getBookingsForRoom(room.id);
       const isAvailable = isRoomAvailable(room.id, startDate, endDate);
       
-      if (isAvailable && !currentBooking) {
+      // Find overlapping booking for the filtered period
+      const overlappingBooking = bookings.find(booking => {
+        const bookingStart = parseISO(booking.bookingDate);
+        const bookingEnd = addDays(bookingStart, booking.durationDays);
+        const filterStart = parseISO(startDate);
+        const filterEnd = parseISO(endDate);
+        
+        return isWithinInterval(filterStart, { start: bookingStart, end: bookingEnd }) ||
+               isWithinInterval(filterEnd, { start: bookingStart, end: bookingEnd }) ||
+               (filterStart <= bookingStart && filterEnd >= bookingEnd);
+      });
+      
+      if (isAvailable && !overlappingBooking) {
         available.push(room);
       } else {
-        occupiedOrBooked.push(room);
+        occupiedOrBooked.push({
+          room,
+          overlappingBooking
+        });
       }
     });
 
-    return { availableRooms: available, occupiedOrBookedRooms: occupiedOrBooked };
-  }, [filteredRooms, getCurrentBookingsForRoom, isRoomAvailable, startDate, endDate]);
+    return { 
+      availableRooms: available, 
+      occupiedOrBookedRooms: occupiedOrBooked 
+    };
+  }, [filteredRooms, getBookingsForRoom, isRoomAvailable, startDate, endDate]);
 
   if (filteredRooms.length === 0) {
     return (
@@ -92,18 +110,15 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {occupiedOrBookedRooms.length > 0 ? (
-            occupiedOrBookedRooms.map(room => {
-              const currentBooking = getCurrentBookingsForRoom(room.id)[0];
-              return (
-                <RoomCard 
-                  key={room.id}
-                  room={room}
-                  currentBooking={currentBooking}
-                  isAvailable={false}
-                  onClick={() => onSelectRoom(room.id)}
-                />
-              );
-            })
+            occupiedOrBookedRooms.map(({ room, overlappingBooking }) => (
+              <RoomCard 
+                key={room.id}
+                room={room}
+                currentBooking={overlappingBooking}
+                isAvailable={false}
+                onClick={() => onSelectRoom(room.id)}
+              />
+            ))
           ) : (
             <p className="text-gray-500 col-span-2 py-6 text-center">No occupied or booked rooms.</p>
           )}

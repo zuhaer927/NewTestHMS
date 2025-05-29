@@ -12,30 +12,30 @@ interface RoomCardProps {
 
 const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAvailable }) => {
   const getStatusColor = () => {
-    if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
-      return 'bg-red-100 border-red-300';
-    }
     if (!isAvailable) {
+      if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
+        return 'bg-red-100 border-red-300';
+      }
       return 'bg-amber-100 border-amber-300';
     }
     return 'bg-green-100 border-green-300';
   };
 
   const getStatusText = () => {
-    if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
-      return 'Occupied';
-    }
     if (!isAvailable) {
+      if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
+        return 'Occupied';
+      }
       return 'Booked';
     }
     return 'Available';
   };
 
   const getStatusDot = () => {
-    if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
-      return 'bg-red-500';
-    }
     if (!isAvailable) {
+      if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
+        return 'bg-red-500';
+      }
       return 'bg-amber-500';
     }
     return 'bg-green-500';
@@ -93,8 +93,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
             <p className="text-sm font-medium">{currentBooking.guestName}</p>
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>
-                {format(parseISO(currentBooking.bookingDate), 'MMM d')} - 
-                {format(addDays(parseISO(currentBooking.bookingDate), currentBooking.durationDays), 'MMM d')}
+                {format(parseISO(currentBooking.bookingDate), 'dd/MM/yyyy')} - 
+                {format(addDays(parseISO(currentBooking.bookingDate), currentBooking.durationDays), 'dd/MM/yyyy')}
               </span>
               <span>{currentBooking.durationDays} days</span>
             </div>
