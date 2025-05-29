@@ -28,7 +28,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
       role="button"
       tabIndex={0}
     >
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h3 className="text-lg font-semibold">Room {room.roomNumber}</h3>
           <div className="flex items-center space-x-3 text-gray-600">
