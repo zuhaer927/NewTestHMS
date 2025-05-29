@@ -3,7 +3,7 @@ import BookingsList from '../components/bookings/BookingsList';
 
 const BookingsPage: React.FC = () => {
   return (
-    <div >
+    <div className="space-y-6">
       <BookingsList />
     </div>
   );
