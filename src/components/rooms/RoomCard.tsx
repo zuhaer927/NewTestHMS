@@ -18,7 +18,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
       }
       return 'bg-amber-100 border-amber-300';
     }
-    return 'bg-green-100 border-green-300';
+    return 'bg-green-200 border-green-300';
   };
 
   return (
