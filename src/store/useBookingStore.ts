@@ -72,14 +72,14 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   bookings: initialBookings,
 
   addBooking: (bookingData) => {
-  const id = uuidv4();
-  const newBooking = { ...bookingData, id };
-  set((state) => {
-    const updatedBookings = [...state.bookings, newBooking];
-    return { bookings: updatedBookings }; // This should trigger a re-render
-  });
-  return id;
-},
+    const id = uuidv4();
+    const newBooking = { ...bookingData, id };
+    set((state) => {
+      const updatedBookings = [...state.bookings, newBooking];
+      return { bookings: updatedBookings };
+    });
+    return id;
+  },
 
   updateBooking: (id, bookingData) => {
     let updated = false;
@@ -146,19 +146,15 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   isRoomAvailable: (roomId, startDate, endDate, excludeBookingId) => {
     const bookings = get().getBookingsForRoom(roomId);
     const requestStart = startOfDay(parseISO(startDate));
-    const requestEnd = startOfDay(addDays(parseISO(endDate), -1)); // End date is exclusive
+    const requestEnd = startOfDay(addDays(parseISO(endDate), -1));
     
     return !bookings.some((booking) => {
       if (excludeBookingId && booking.id === excludeBookingId) return false;
-      if (booking.checkOutDateTime) return false;
+      if (booking.checkOutDateTime) return false; // Room is available if booking is checked out
       
       const bookingStart = startOfDay(parseISO(booking.bookingDate));
-      const bookingEnd = startOfDay(addDays(parseISO(booking.bookingDate), booking.durationDays - 1)); // End date is exclusive
+      const bookingEnd = startOfDay(addDays(parseISO(booking.bookingDate), booking.durationDays - 1));
       
-      // Check if the requested dates overlap with the booking
-      // For example: if a room is booked for May 27 for 2 days
-      // it means it's occupied on May 27 and May 28
-      // and can be booked again starting from May 29
       return (
         (isWithinInterval(requestStart, { start: bookingStart, end: bookingEnd }) ||
          isWithinInterval(requestEnd, { start: bookingStart, end: bookingEnd }) ||
@@ -200,10 +196,10 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     const occupiedRoomIds = new Set<string>();
     
     const requestStart = startOfDay(parseISO(startDate));
-    const requestEnd = startOfDay(addDays(parseISO(endDate), -1)); // End date is exclusive
+    const requestEnd = startOfDay(addDays(parseISO(endDate), -1));
     
     allBookings.forEach((booking) => {
-      if (booking.checkOutDateTime) return;
+      if (booking.checkOutDateTime) return; // Room is available if booking is checked out
       
       const bookingStart = startOfDay(parseISO(booking.bookingDate));
       const bookingEnd = startOfDay(addDays(parseISO(booking.bookingDate), booking.durationDays - 1));
@@ -245,7 +241,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     const bookedRoomIds = new Set<string>();
     
     get().bookings.forEach((booking) => {
-      if (booking.checkOutDateTime) return;
+      if (booking.checkOutDateTime) return; // Room is available if booking is checked out
       
       const bookingStart = startOfDay(parseISO(booking.bookingDate));
       const bookingEnd = startOfDay(addDays(parseISO(booking.bookingDate), booking.durationDays - 1));

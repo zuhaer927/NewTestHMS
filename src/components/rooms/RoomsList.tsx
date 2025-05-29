@@ -38,14 +38,16 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
   // Separate available and occupied/booked rooms based on date filter
   const { availableRooms, occupiedOrBookedRooms } = useMemo(() => {
     const available: Room[] = [];
-    const occupiedOrBooked: Room[] = [];
+    const occupiedOrBooked: { room: Room; overlappingBooking?: Booking }[] = [];
 
     filteredRooms.forEach(room => {
       const bookings = getBookingsForRoom(room.id);
       const isAvailable = isRoomAvailable(room.id, startDate, endDate);
       
-      // Find overlapping booking for the filtered period
+      // Find active or future booking for the filtered period
       const overlappingBooking = bookings.find(booking => {
+        if (booking.checkOutDateTime) return false; // Skip checked-out bookings
+        
         const bookingStart = parseISO(booking.bookingDate);
         const bookingEnd = addDays(bookingStart, booking.durationDays);
         const filterStart = parseISO(startDate);
@@ -56,7 +58,7 @@ const RoomsList: React.FC<RoomsListProps> = ({ onSelectRoom, filter }) => {
                (filterStart <= bookingStart && filterEnd >= bookingEnd);
       });
       
-      if (isAvailable && !overlappingBooking) {
+      if (isAvailable || !overlappingBooking) {
         available.push(room);
       } else {
         occupiedOrBooked.push({
