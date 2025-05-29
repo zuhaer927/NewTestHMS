@@ -34,7 +34,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
   const getStatusDot = () => {
     if (!isAvailable) {
       if (currentBooking?.checkInDateTime && !currentBooking?.checkOutDateTime) {
-        return 'bg-red-500';
+        return 'bg-red-100';
       }
       return 'bg-amber-500';
     }
