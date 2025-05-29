@@ -51,7 +51,6 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
           </div>
         </div>
       </div>
-
       {currentBooking && (
         <div className="mt-2 pt-2 border-t border-gray-200">
           <p className="text-sm font-medium">{currentBooking.guestName}</p>
