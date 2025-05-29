@@ -46,7 +46,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
           </span>
           {room.problems.length > 0 && (
         <div className="flex items-start text-red-600 mt-2">
-          <AlertTriangle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+          <AlertTriangle className="h-3 w-3 flex-shrink-0" />
         </div>
       )}
         </div>
