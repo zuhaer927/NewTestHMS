@@ -41,9 +41,14 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
               <span className="ml-1">{room.hasAC ? 'AC' : '-'}</span>
             </div>
           </div>
-          <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-            {room.category}
-          </span>
+          <div className="flex items-center space-x-1">
+            <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+              {room.category}
+            </span>
+            {room.problems.length > 0 && (
+              <AlertTriangle className="h-3 w-3 text-red-600 mt-0.5" />
+            )}
+          </div>
         </div>
       </div>
 
