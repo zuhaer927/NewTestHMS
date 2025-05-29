@@ -37,10 +37,6 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
               <span className="ml-1">{room.beds}</span>
             </div>
             <div className="flex items-center">
-              <Droplets className="h-4 w-4" />
-              <span className="ml-1">{room.bathrooms}</span>
-            </div>
-            <div className="flex items-center">
               <Thermometer className="h-4 w-4" />
               <span className="ml-1">{room.hasAC ? 'AC' : '-'}</span>
             </div>
