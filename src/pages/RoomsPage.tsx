@@ -77,14 +77,15 @@ const RoomsPage: React.FC = () => {
       <RoomsList onSelectRoom={handleSelectRoom} filter={filter} />
 
       {isAdmin && (
-          <button
-            onClick={handleAddRoom}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            Add Room
-          </button>
-        )}
+  <button
+    onClick={handleAddRoom}
+    className="fixed bottom-6 right-6 z-50 inline-flex items-center px-4 py-2 rounded-full shadow-lg text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+  >
+    <Plus className="h-5 w-5 mr-2" />
+    Add Room
+  </button>
+)}
+
       
     </div>
   );
