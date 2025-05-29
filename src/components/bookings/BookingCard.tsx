@@ -82,6 +82,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       toast.error('New paid amount must be greater than current paid amount');
       return;
     }
+
+    ///
     
     updateBooking(booking.id, { paidAmount: newPaidAmount });
     
