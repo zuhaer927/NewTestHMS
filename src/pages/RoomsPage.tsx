@@ -75,8 +75,7 @@ const RoomsPage: React.FC = () => {
           Add Room
         </button>
       )}
-
-      
+ 
     </div>
   );
 };
