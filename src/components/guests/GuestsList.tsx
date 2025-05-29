@@ -79,7 +79,7 @@ const GuestsList: React.FC = () => {
                     <div className="bg-teal-50 p-3 rounded-md mb-3">
                       <p className="text-sm font-medium text-teal-800">Currently Staying</p>
                       <p className="text-xs text-teal-700">
-                        Room: {activeBooking.roomId}, 
+                        Room: {getRoomById(activeBooking.roomId).roomNumber}, 
                         Check-in: {format(parseISO(activeBooking.checkInDateTime!), 'dd/MM/yyyy')}
                       </p>
                     </div>
