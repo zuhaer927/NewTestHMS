@@ -55,7 +55,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
             <p className="text-sm text-gray-600">Floor {room.floor}</p>
           </div>
           <div className="flex items-center">
-            //<span className={`inline-block w-3 h-3 rounded-full ${getStatusDot()} mr-2`}></span>
+            <span className={`inline-block w-3 h-3 rounded-full ${getStatusDot()} mr-2`}></span>
             <span className="text-sm font-medium">{getStatusText()}</span>
           </div>
         </div>
