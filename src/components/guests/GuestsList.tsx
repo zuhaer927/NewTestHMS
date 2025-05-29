@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGuestStore } from '../../store/useGuestStore';
 import { useBookingStore } from '../../store/useBookingStore';
+import { useRoomStore } from '../../store/useRoomStore';
 import { User, Phone, CreditCard, Calendar, Search } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -77,7 +78,7 @@ const GuestsList: React.FC = () => {
                     <div className="bg-teal-50 p-3 rounded-md mb-3">
                       <p className="text-sm font-medium text-teal-800">Currently Staying</p>
                       <p className="text-xs text-teal-700">
-                        Room: {activeBooking.roomId}, 
+                        Room: {getRommById(activeBooking.roomId).roomNumber}, 
                         Check-in: {format(parseISO(activeBooking.checkInDateTime!), 'dd/MM/yyyy')}
                       </p>
                     </div>
