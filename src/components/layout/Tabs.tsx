@@ -42,7 +42,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, setActiveTab }) => {
               aria-current={activeTab === tab.id ? 'page' : undefined}
             >
               {tab.icon}
-              <span>{tab.label}</span>
+              
             </button>
           ))}
         </nav>
