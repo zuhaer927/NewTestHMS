@@ -110,7 +110,7 @@ const GuestsList: React.FC = () => {
                       <ul className="text-xs text-gray-600 space-y-1">
                         {pastBookings.slice(0, 2).map(booking => (
                           <li key={booking.id}>
-                            Room {booking.roomId}, {format(parseISO(booking.bookingDate), 'dd/MM/yyyy')} 
+                            Room: {getRoomById(booking.roomId).roomNumber}, {format(parseISO(booking.bookingDate), 'dd/MM/yyyy')} 
                             ({booking.durationDays} days)
                           </li>
                         ))}
