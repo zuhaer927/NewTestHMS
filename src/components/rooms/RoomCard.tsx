@@ -41,7 +41,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
               <span className="ml-1">{room.hasAC ? 'AC' : '-'}</span>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
   <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
     {room.category}
   </span>
