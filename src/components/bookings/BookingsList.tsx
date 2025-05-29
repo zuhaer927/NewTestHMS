@@ -51,7 +51,7 @@ const BookingsList: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <div className="flex items-center bg-white rounded-lg shadow-sm p-2">
+      <div className="flex items-center bg-white rounded-lg shadow-lg p-2">
         <Search className="h-5 w-5 text-gray-400 ml-2 mr-1" />
         <input
           type="text"
