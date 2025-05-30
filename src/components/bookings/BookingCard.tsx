@@ -9,13 +9,11 @@ interface BookingCardProps {
   booking: Booking;
   isActive: boolean;
   showRoom?: boolean;
-  roomNumber?: string;  // ✅ ADD THIS LINE
+  roomNumber?: string;
   onUpdate?: () => void;
 }
 
-
-
-const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom = false, onUpdate }) => {
+const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom = false, roomNumber, onUpdate }) => {
   const { checkIn, checkOut, updateBooking, getCurrentBookingsForRoom, isRoomAvailable } = useBookingStore();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showExtendModal, setShowExtendModal] = useState(false);
@@ -155,10 +153,10 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
             <div>
               <h3 className="text-lg font-semibold">{booking.guestName}</h3>
               {showRoom && (
-  <p className="text-sm text-gray-600">
-    Room {roomNumber ?? booking.roomId}
-  </p>
-)}
+                <p className="text-sm text-gray-600">
+                  Room {roomNumber ?? booking.roomId}
+                </p>
+              )}
             </div>
             <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${paymentStatusClass}`}>
               {paymentStatus}
