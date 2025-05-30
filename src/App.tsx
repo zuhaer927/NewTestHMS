@@ -4,6 +4,7 @@ import LoginForm from './components/auth/LoginForm';
 import RoomsPage from './pages/RoomsPage';
 import GuestsPage from './pages/GuestsPage';
 import BookingsPage from './pages/BookingsPage';
+import OverviewPage from './pages/OverviewPage';
 import { TabType } from './types';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -23,6 +24,8 @@ function App() {
         return <GuestsPage />;
       case 'bookings':
         return <BookingsPage />;
+      case 'overview':
+        return <OverviewPage />;
       default:
         return <RoomsPage />;
     }
