@@ -51,7 +51,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, setActiveTab }) => {
                   aria-current={activeTab === tab.id ? 'page' : undefined}
                 >
                   {tab.icon}
-                  <span>{tab.label}</span>
+                  <span className="hidden md:inline">{tab.label}</span>
                 </button>
               ))}
           </div>
