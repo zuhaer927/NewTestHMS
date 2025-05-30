@@ -62,7 +62,7 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({ onFilterChange }) => {
         
         <div>
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
-            Start Date
+            Check-In Date
           </label>
           <input
             type="date"
