@@ -40,16 +40,24 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
   };
 
   const handleExtendBooking = () => {
-    const newEndDate = format(
-      addDays(
-        addDays(parseISO(booking.bookingDate), booking.durationDays),
-        parseInt(extraDays)
-      )
-    );
+    const parsedExtraDays = parseInt(extraDays);
+    if (isNaN(parsedExtraDays) || parsedExtraDays < 1) {
+      toast.error('Please enter a valid number of days (minimum 1)');
+      return;
+    }
+
+    const parsedExtraAmount = parseFloat(extraAmount);
+    if (isNaN(parsedExtraAmount) || parsedExtraAmount < 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
+
+    const currentEndDate = addDays(parseISO(booking.bookingDate), booking.durationDays);
+    const newEndDate = format(addDays(currentEndDate, parsedExtraDays), 'yyyy-MM-dd');
 
     if (!isRoomAvailable(
       booking.roomId,
-      format(addDays(parseISO(booking.bookingDate), booking.durationDays)),
+      format(currentEndDate, 'yyyy-MM-dd'),
       newEndDate,
       booking.id
     )) {
@@ -57,8 +65,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       return;
     }
 
-    const newDuration = booking.durationDays + parseInt(extraDays);
-    const newTotalAmount = booking.totalAmount + parseInt(extraAmount);
+    const newDuration = booking.durationDays + parsedExtraDays;
+    const newTotalAmount = booking.totalAmount + parsedExtraAmount;
 
     updateBooking(booking.id, {
       durationDays: newDuration,
@@ -126,6 +134,15 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
   const paymentStatusClass = booking.paidAmount >= booking.totalAmount
     ? 'bg-green-100 text-green-800'
     : 'bg-amber-100 text-amber-800';
+
+  const getNewCheckoutDate = () => {
+    const parsedExtraDays = parseInt(extraDays);
+    if (isNaN(parsedExtraDays) || parsedExtraDays < 1) {
+      return 'Please enter a valid number of days';
+    }
+    const currentEndDate = addDays(parseISO(booking.bookingDate), booking.durationDays);
+    return format(addDays(currentEndDate, parsedExtraDays), 'dd/MM/yyyy');
+  };
   
   return (
     <>
@@ -308,13 +325,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
 
               <div className="pt-4">
                 <p className="text-sm text-gray-600">
-                  New check-out date will be: {format(
-                    addDays(
-                      addDays(parseISO(booking.bookingDate), booking.durationDays),
-                      parseInt(extraDays)
-                    ),
-                    'dd/MM/yyyy'
-                  )}
+                  New check-out date will be: {getNewCheckoutDate()}
                 </p>
               </div>
 
