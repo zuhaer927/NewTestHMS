@@ -79,6 +79,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
       nationalId,
       phone,
     });
+
+    const getMaxGuests = (category: room.category) => {
+      switch (category) {
+        case 'Couple':
+          return 2;
+        case 'Double':
+          return 5;
+        case 'Connecting':
+          return 10;
+        default:
+          return 5; // fallback just in case
+      }
+    };
+
     
     // Create booking
     addBooking({
@@ -163,7 +177,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
             value={numberOfPeople}
             onChange={(e) => setNumberOfPeople(e.target.value)}
             min="1"
-            max={room.beds * 2} // Assuming max 2 people per bed
+            max={getMaxGuests(room.category)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             required
           />
