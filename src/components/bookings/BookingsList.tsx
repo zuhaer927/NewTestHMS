@@ -76,12 +76,13 @@ const BookingsList: React.FC = () => {
             return (
               <BookingCard 
   key={`${booking.id}-${refreshKey}`} 
-  booking={booking} // don't modify booking.roomId
+  booking={booking}
   isActive={isActive}
   showRoom={true}
   onUpdate={handleBookingUpdated}
-  roomNumber={room?.roomNumber}  // pass separately if you want to display room number
+  roomNumber={room?.roomNumber}   // ✅ this is new prop
 />
+
 
             );
           })}
