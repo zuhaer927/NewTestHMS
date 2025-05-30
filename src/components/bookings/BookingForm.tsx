@@ -163,7 +163,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
             value={numberOfPeople}
             onChange={(e) => setNumberOfPeople(e.target.value)}
             min="1"
-            max={getMaxGuests(room.category)}
+            max={room.beds * 2}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             required
           />
