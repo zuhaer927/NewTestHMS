@@ -9,9 +9,10 @@ interface BookingCardProps {
   booking: Booking;
   isActive: boolean;
   showRoom?: boolean;
-  roomNumber?: string;
+  roomNumber?: string;  // ✅ ADD THIS LINE
   onUpdate?: () => void;
 }
+
 
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom = false, onUpdate }) => {
