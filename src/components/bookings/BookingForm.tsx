@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RoomCategory } from '../../types';
 import { useBookingStore } from '../../store/useBookingStore';
 import { useGuestStore } from '../../store/useGuestStore';
 import { useRoomStore } from '../../store/useRoomStore';
