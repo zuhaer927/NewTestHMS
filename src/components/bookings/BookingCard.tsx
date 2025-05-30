@@ -3,7 +3,6 @@ import { Booking } from '../../types';
 import { User, Calendar, Clock, CreditCard, Users, X, Plus } from 'lucide-react';
 import { format, parseISO, addDays } from 'date-fns';
 import { useBookingStore } from '../../store/useBookingStore';
-import { format, parseISO } from 'date-fns';
 import toast from 'react-hot-toast';
 
 interface BookingCardProps {
