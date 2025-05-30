@@ -81,7 +81,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
     });
 
     // Find maximum guest in room by category
-    const getMaxGuests = (category: string) => {
+    const getMaxGuests = (category: RoomCategory) => {
       switch (category) {
         case 'Couple':
           return 2;
