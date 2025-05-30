@@ -44,13 +44,12 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
       addDays(
         addDays(parseISO(booking.bookingDate), booking.durationDays),
         parseInt(extraDays)
-      ),
-      'dd/MM/yyyy'
+      )
     );
 
     if (!isRoomAvailable(
       booking.roomId,
-      format(addDays(parseISO(booking.bookingDate), booking.durationDays), 'dd/MM/yyyy'),
+      format(addDays(parseISO(booking.bookingDate), booking.durationDays)),
       newEndDate,
       booking.id
     )) {
