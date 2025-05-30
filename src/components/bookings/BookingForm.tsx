@@ -59,7 +59,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
       }
     }
   }, [bookingDate, durationDays, roomId, isRoomAvailable]);
-  
+
+  // Find maximum guest by category
+  const getMaxGuests = (category: RoomCategory) => {
+    switch (category) {
+      case 'Couple':
+        return 2;
+      case 'Double':
+        return 5;
+      case 'Connecting':
+        return 10;
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -164,7 +176,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
             value={numberOfPeople}
             onChange={(e) => setNumberOfPeople(e.target.value)}
             min="1"
-            max={room.beds * 2}
+            max={getMaxGuests(room.category)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             required
           />
@@ -196,7 +208,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ roomId, onSubmit, onCancel })
             value={paidAmount}
             onChange={(e) => setPaidAmount(e.target.value)}
             min="0"
-            step="0.01"
+            step="1"
             max={totalAmount || undefined}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
           />
