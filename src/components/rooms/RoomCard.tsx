@@ -42,7 +42,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, currentBooking, onClick, isAv
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+            <span className="text-[10px] sm:text-xs font-medium bg-blue-100 text-blue-800 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
               {room.category}
             </span>
             {room.problems.length > 0 && (
