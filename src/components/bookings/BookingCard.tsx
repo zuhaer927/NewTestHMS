@@ -154,8 +154,10 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive, showRoom =
             <div>
               <h3 className="text-lg font-semibold">{booking.guestName}</h3>
               {showRoom && (
-                <p className="text-sm text-gray-600">Room {booking.roomId}</p>
-              )}
+  <p className="text-sm text-gray-600">
+    Room {roomNumber ?? booking.roomId}
+  </p>
+)}
             </div>
             <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${paymentStatusClass}`}>
               {paymentStatus}
