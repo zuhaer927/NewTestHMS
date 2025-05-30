@@ -75,7 +75,7 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({ onFilterChange }) => {
         
         <div>
           <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">
-            End Date
+            Check-Out Date
           </label>
           <input
             type="date"
